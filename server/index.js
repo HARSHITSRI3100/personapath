@@ -24,9 +24,11 @@ const app = express();
 connectDB();
 
 // Security middleware
-app.use(helmet());
+const cors = require("cors");
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: "https://personapath-mirror.netlify.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
