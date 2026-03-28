@@ -35,7 +35,7 @@ export default function DashboardPage() {
     );
   }
 
-  const { latestPersonality, insights, scoreHistory, recentJournals } = stats || {};
+  const { latestPersonality, insights, recentJournals } = stats || {};
   const greeting = new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening';
 
   return (
