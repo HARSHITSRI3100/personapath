@@ -24,7 +24,13 @@ const app = express();
 connectDB();
 
 // Security middleware
+const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+
+const app = express();
+
+app.use(helmet());
 
 app.use(cors({
   origin: "https://personapath-mirror.netlify.app",
