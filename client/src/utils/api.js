@@ -1,21 +1,19 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://personapath-backend.onrender.com';
+const API_BASE = process.env.REACT_APP_API_URL || 'https://personapath-backend.onrender.com';
 
 const api = axios.create({
-  baseURL: `${API_URL}/api`,
+  baseURL: `${API_BASE}/api`,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 15000,
+  timeout: 20000,
 });
 
-// Attach JWT to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('pp_token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// Handle expired token globally
 api.interceptors.response.use(
   (res) => res,
   (err) => {
