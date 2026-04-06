@@ -4,11 +4,13 @@ import { useAuth } from '../../context/AuthContext';
 import { getInitials } from '../../utils/helpers';
 
 const NAV_ITEMS = [
-  { to: '/dashboard', icon: '⬡',  label: 'Dashboard' },
-  { to: '/quiz',      icon: '◈',  label: 'Take Quiz' },
-  { to: '/analysis',  icon: '◉',  label: 'AI Insights' },
-  { to: '/journal',   icon: '◫',  label: 'Journal' },
-  { to: '/history',   icon: '◷',  label: 'History' },
+  { to: '/dashboard',   icon: '⬡',  label: 'Dashboard' },
+  { to: '/quiz',        icon: '◈',  label: 'Take Quiz' },
+  { to: '/analysis',   icon: '◉',  label: 'Insights' },
+  { to: '/ai-insights', icon: '✦',  label: 'AI Analysis', badge: 'GPT-4o' },
+  { to: '/chat',        icon: '💬', label: 'Career Coach', badge: 'New' },
+  { to: '/journal',     icon: '◫',  label: 'Journal' },
+  { to: '/history',     icon: '◷',  label: 'History' },
 ];
 
 export default function AppLayout() {
@@ -16,14 +18,10 @@ export default function AppLayout() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const handleLogout = () => { logout(); navigate('/'); };
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
-      {/* Logo */}
       <div className="px-6 py-6 border-b border-zinc-800">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-600 to-purple-600 flex items-center justify-center shadow-lg shadow-primary-500/30 flex-shrink-0">
@@ -31,14 +29,13 @@ export default function AppLayout() {
           </div>
           <div>
             <p className="font-display text-lg text-white leading-none">PersonaPath</p>
-            <p className="text-zinc-500 text-xs font-mono mt-0.5">v1.0</p>
+            <p className="text-zinc-500 text-xs font-mono mt-0.5">v2.0 · AI</p>
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {NAV_ITEMS.map(({ to, icon, label }) => (
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        {NAV_ITEMS.map(({ to, icon, label, badge }) => (
           <NavLink
             key={to}
             to={to}
@@ -51,13 +48,17 @@ export default function AppLayout() {
               }`
             }
           >
-            <span className="text-lg font-mono w-5 text-center">{icon}</span>
-            {label}
+            <span className="text-base font-mono w-5 text-center">{icon}</span>
+            <span className="flex-1">{label}</span>
+            {badge && (
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary-600/40 text-primary-300 border border-primary-500/30">
+                {badge}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>
 
-      {/* Streak indicator */}
       {user?.streakCount > 0 && (
         <div className="mx-3 mb-3 px-4 py-3 glass rounded-xl">
           <p className="text-xs text-zinc-500 mb-1">Current Streak</p>
@@ -68,7 +69,6 @@ export default function AppLayout() {
         </div>
       )}
 
-      {/* User card */}
       <div className="p-3 border-t border-zinc-800">
         <div className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-zinc-800/70 transition-colors cursor-pointer group">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-700 to-purple-700 flex items-center justify-center flex-shrink-0 text-sm font-bold text-white">
@@ -78,11 +78,8 @@ export default function AppLayout() {
             <p className="text-sm font-semibold text-zinc-200 truncate">{user?.name}</p>
             <p className="text-xs text-zinc-500 truncate">{user?.email}</p>
           </div>
-          <button
-            onClick={handleLogout}
-            title="Logout"
-            className="opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-red-400 transition-all text-lg"
-          >
+          <button onClick={handleLogout} title="Logout"
+            className="opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-red-400 transition-all text-lg">
             ↩
           </button>
         </div>
@@ -92,12 +89,10 @@ export default function AppLayout() {
 
   return (
     <div className="flex h-screen bg-surface-950 overflow-hidden">
-      {/* Desktop sidebar */}
       <aside className="hidden lg:flex flex-col w-64 bg-zinc-900/80 border-r border-zinc-800 flex-shrink-0">
         <SidebarContent />
       </aside>
 
-      {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
@@ -107,9 +102,7 @@ export default function AppLayout() {
         </div>
       )}
 
-      {/* Main content */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Mobile top bar */}
         <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-zinc-900/80 border-b border-zinc-800 flex-shrink-0">
           <button onClick={() => setSidebarOpen(true)} className="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800">
             <span className="text-xl">☰</span>
@@ -123,7 +116,6 @@ export default function AppLayout() {
           </div>
         </div>
 
-        {/* Scrollable page content */}
         <div className="flex-1 overflow-y-auto">
           <div className="page-enter">
             <Outlet />
