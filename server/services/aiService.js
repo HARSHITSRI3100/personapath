@@ -33,7 +33,7 @@ const fallbackResponse = () => ({
 
 // ─── Personality Analysis ────────────────────────────────────
 const analyzePersonality = async (scores, personalityType, dominantTrait) => {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const prompt = `
 You are an expert psychologist.
@@ -64,7 +64,7 @@ JSON FORMAT:
 
 // ─── Journal Analysis ────────────────────────────────────────
 const analyzeJournalEntry = async (content, previousMoods = []) => {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const prompt = `
 Analyze this journal entry:
@@ -93,7 +93,7 @@ Return JSON:
 
 // ─── Career Coach Chat ───────────────────────────────────────
 const careerCoachChat = async (message, personality, chatHistory = []) => {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const context = `
 You are Alex, a smart career coach.
