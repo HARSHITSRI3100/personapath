@@ -23,10 +23,10 @@ const journalSchema = new mongoose.Schema({
     enum: ['ecstatic', 'happy', 'neutral', 'sad', 'anxious', 'angry'],
     default: 'neutral'
   },
-  // AI-generated analysis of the journal entry
   aiAnalysis: {
-    sentiment: { type: Number, min: -1, max: 1, default: 0 }, // -1 negative, 0 neutral, 1 positive
-    keywords: [String],
+    // Rule-based fields (original)
+    sentiment:  { type: Number, min: -1, max: 1, default: 0 },
+    keywords:   [String],
     traitSignals: {
       extraversion:        { type: Number, default: 0 },
       agreeableness:       { type: Number, default: 0 },
@@ -34,10 +34,19 @@ const journalSchema = new mongoose.Schema({
       emotional_stability: { type: Number, default: 0 },
       openness:            { type: Number, default: 0 }
     },
-    summary: String,
-    suggestions: [String]
+    summary:     String,
+    suggestions: [String],
+
+    // GPT-4o AI fields (new)
+    isAiAnalyzed:  { type: Boolean, default: false },
+    aiMood:        String,
+    sentimentScore: { type: Number, min: 0, max: 100 },
+    emotionalTone: String,
+    insights:     [String],
+    keyThemes:    [String],
+    affirmation:  String,
   },
-  tags: [String],
+  tags:       [String],
   isAnalyzed: { type: Boolean, default: false }
 }, { timestamps: true });
 
