@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
-import { MOOD_CONFIG, formatRelativeTime, TRAIT_CONFIG } from '../utils/helpers';
+import { MOOD_CONFIG, formatRelativeTime } from '../utils/helpers';
 import { useAuth } from '../context/AuthContext';
 
 const MOODS = Object.entries(MOOD_CONFIG);

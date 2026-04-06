@@ -67,11 +67,11 @@ function AIThinkingLoader() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setStep(s => (s + 1) % steps.length);
-    }, 1800);
-    return () => clearInterval(interval);
-  }, []);
+  const interval = setInterval(() => {
+    setStep(s => (s + 1) % steps.length);
+  }, 1800);
+  return () => clearInterval(interval);
+}, [steps.length]);
 
   return (
     <div className="flex flex-col items-center justify-center py-24 gap-6">

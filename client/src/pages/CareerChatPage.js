@@ -88,13 +88,13 @@ export default function CareerChatPage() {
 
   // Welcome message
   useEffect(() => {
-    const welcome = {
-      role: 'assistant',
-      content: `Hi ${user?.name?.split(' ')[0] || 'there'}! 👋 I'm Alex, your personal AI career coach.\n\nI've been briefed on your personality profile${personality ? ` — you're ${personality.personalityType}` : ''}. I can help you with career decisions, workplace strategies, personal growth, and more.\n\nWhat's on your mind today?`,
-      timestamp: new Date().toISOString(),
-    };
-    setMessages([welcome]);
-  }, [personality?.personalityType]);
+  const welcome = {
+    role: 'assistant',
+    content: `Hi ${user?.name?.split(' ')[0] || 'there'}! 👋 I'm Alex, your personal AI career coach.\n\nI've been briefed on your personality profile${personality ? ` — you're ${personality.personalityType}` : ''}. I can help you with career decisions, workplace strategies, personal growth, and more.\n\nWhat's on your mind today?`,
+    timestamp: new Date().toISOString(),
+  };
+  setMessages([welcome]);
+}, [personality?.personalityType, user?.name]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
