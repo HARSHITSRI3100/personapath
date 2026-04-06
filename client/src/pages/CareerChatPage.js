@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+
 import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { TRAIT_CONFIG } from '../utils/helpers';
@@ -94,7 +94,7 @@ export default function CareerChatPage() {
     timestamp: new Date().toISOString(),
   };
   setMessages([welcome]);
-}, [personality?.personalityType, user?.name]);
+}, [personality, user?.name]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
