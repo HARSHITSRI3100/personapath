@@ -5,34 +5,54 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Safe JSON extractor
 const extractJSON = (text) => {
   try {
+    text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+
     const match = text.match(/\{[\s\S]*\}/);
+
+    if (!match) {
+      console.error("RAW AI RESPONSE:", text);
+      return fallbackResponse();
+    }
+
     return JSON.parse(match[0]);
-  } catch {
-    throw new Error("Invalid AI JSON response");
+
+  } catch (err) {
+    console.error("JSON PARSE ERROR:", err);
+    return fallbackResponse();
   }
 };
+
+const fallbackResponse = () => ({
+  summary: "AI analysis temporarily unavailable. Please try again.",
+  strengths: ["Self-awareness"],
+  weaknesses: ["Temporary issue"],
+  careerSuggestions: ["Try again later"],
+  growthTips: ["Retry analysis"],
+  compatibleTypes: []
+});
 
 // ─── Personality Analysis ────────────────────────────────────
 const analyzePersonality = async (scores, personalityType, dominantTrait) => {
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const prompt = `
-You are an expert personality psychologist.
+You are an expert psychologist.
+
+STRICT RULE:
+Return ONLY valid JSON. No text. No explanation.
 
 Personality Type: ${personalityType}
 Dominant Trait: ${dominantTrait}
+Scores: ${JSON.stringify(scores)}
 
-Scores:
-${JSON.stringify(scores)}
-
-Return ONLY JSON:
+JSON FORMAT:
 {
-  "summary": "",
-  "strengths": [],
-  "weaknesses": [],
-  "careerSuggestions": [],
-  "growthTips": [],
-  "compatibleTypes": []
+  "summary": "string",
+  "strengths": ["string"],
+  "weaknesses": ["string"],
+  "careerSuggestions": ["string"],
+  "growthTips": ["string"],
+  "compatibleTypes": ["string"]
 }
 `;
 
