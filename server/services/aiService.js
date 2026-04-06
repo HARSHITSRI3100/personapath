@@ -1,35 +1,52 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const fetch = require("node-fetch");
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + process.env.GEMINI_API_KEY;
 
-// Safe JSON extractor
-const extractJSON = (text) => {
+// ─── Personality Analysis ───
+const analyzePersonality = async (scores, personalityType, dominantTrait) => {
   try {
-    text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    const prompt = `
+Return ONLY JSON.
 
-    const match = text.match(/\{[\s\S]*\}/);
+Personality Type: ${personalityType}
+Dominant Trait: ${dominantTrait}
+Scores: ${JSON.stringify(scores)}
 
-    if (!match) {
-      console.error("RAW AI RESPONSE:", text);
-      return fallbackResponse();
-    }
+{
+  "summary": "string",
+  "strengths": ["string"],
+  "weaknesses": ["string"],
+  "careerSuggestions": ["string"],
+  "growthTips": ["string"],
+  "compatibleTypes": ["string"]
+}
+`;
 
-    return JSON.parse(match[0]);
+    const response = await fetch(GEMINI_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    return JSON.parse(text.match(/\{[\s\S]*\}/)[0]);
 
   } catch (err) {
-    console.error("JSON PARSE ERROR:", err);
-    return fallbackResponse();
+    console.error("AI ERROR:", err);
+    return {
+      summary: "AI temporarily unavailable",
+      strengths: [],
+      weaknesses: [],
+      careerSuggestions: [],
+      growthTips: [],
+      compatibleTypes: []
+    };
   }
 };
-
-const fallbackResponse = () => ({
-  summary: "AI analysis temporarily unavailable. Please try again.",
-  strengths: ["Self-awareness"],
-  weaknesses: ["Temporary issue"],
-  careerSuggestions: ["Try again later"],
-  growthTips: ["Retry analysis"],
-  compatibleTypes: []
-});
 
 // ─── Personality Analysis ────────────────────────────────────
 const analyzePersonality = async (scores, personalityType, dominantTrait) => {
