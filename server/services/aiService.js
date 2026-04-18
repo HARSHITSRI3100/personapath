@@ -1,61 +1,26 @@
 /**
- * PersonaPath – AI Service (Gemini)
- * Uses gemini-1.5-flash via REST — no SDK needed, works on all Node versions
+ * PersonaPath – AI Service (Gemini via official SDK)
  */
 
-const https = require('https');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// ─── Helper: POST to Gemini REST API ────────────────────────
-const callGemini = (prompt) => {
-  return new Promise((resolve, reject) => {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return reject(new Error('GEMINI_API_KEY not set'));
+// ─── Helper: call Gemini ──────────────────────────────────────
+const callGemini = async (prompt) => {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error('GEMINI_API_KEY is not set in environment variables');
 
-    const body = JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 1024,
-      }
-    });
-
-    const options = {
-      hostname: 'generativelanguage.googleapis.com',
-      path: `/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body),
-      },
-    };
-
-    const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try {
-          const parsed = JSON.parse(data);
-          if (parsed.error) {
-            const err = new Error(parsed.error.message);
-            if (res.statusCode === 429) err.status = 429;
-            return reject(err);
-          }
-          const text = parsed?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          resolve(text);
-        } catch (e) {
-          reject(new Error('Failed to parse Gemini response'));
-        }
-      });
-    });
-
-    req.on('error', reject);
-    req.setTimeout(15000, () => { req.destroy(); reject(new Error('Gemini timeout')); });
-    req.write(body);
-    req.end();
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-1.5-flash',
+    generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
   });
+
+  const result = await model.generateContent(prompt);
+  const text = result.response.text();
+  return text;
 };
 
-// ─── Helper: safely extract JSON from Gemini text ───────────
+// ─── Helper: safely extract JSON ─────────────────────────────
 const extractJSON = (text, fallback) => {
   try {
     const cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
@@ -67,7 +32,7 @@ const extractJSON = (text, fallback) => {
   }
 };
 
-// ─── Personality Analysis ────────────────────────────────────
+// ─── Personality Analysis ─────────────────────────────────────
 const analyzePersonality = async (scores, personalityType, dominantTrait) => {
   const fallback = {
     summary: 'Unable to generate analysis right now. Please try again.',
@@ -104,7 +69,7 @@ Respond with ONLY a JSON object, no markdown, no explanation:
   }
 };
 
-// ─── Journal Analysis ────────────────────────────────────────
+// ─── Journal Analysis ─────────────────────────────────────────
 const analyzeJournalEntry = async (content, previousMoods = []) => {
   const fallback = {
     mood: 'neutral',
@@ -148,7 +113,7 @@ Respond with ONLY a JSON object, no markdown:
   }
 };
 
-// ─── Career Coach Chat ───────────────────────────────────────
+// ─── Career Coach Chat ────────────────────────────────────────
 const careerCoachChat = async (message, personality, history = []) => {
   try {
     const personalityContext = personality
@@ -174,7 +139,7 @@ Respond as Alex — warm, specific, actionable. Reference their personality trai
   } catch (err) {
     console.error('Chat AI error:', err.message);
     if (err.status === 429) throw err;
-    return 'I\'m having a moment — please send your message again!';
+    throw err; // re-throw so controller sends proper error to frontend
   }
 };
 
