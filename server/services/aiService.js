@@ -35,7 +35,11 @@ const callGemini = (prompt) => {
       res.on('end', () => {
         try {
           const parsed = JSON.parse(data);
-          if (parsed.error) return reject(new Error(parsed.error.message));
+          if (parsed.error) {
+            const err = new Error(parsed.error.message);
+            if (res.statusCode === 429) err.status = 429;
+            return reject(err);
+          }
           const text = parsed?.candidates?.[0]?.content?.parts?.[0]?.text || '';
           resolve(text);
         } catch (e) {
@@ -54,9 +58,7 @@ const callGemini = (prompt) => {
 // ─── Helper: safely extract JSON from Gemini text ───────────
 const extractJSON = (text, fallback) => {
   try {
-    // Strip markdown code fences
     const cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-    // Find first { ... } block
     const match = cleaned.match(/\{[\s\S]*\}/);
     if (!match) return fallback;
     return JSON.parse(match[0]);
@@ -97,6 +99,7 @@ Respond with ONLY a JSON object, no markdown, no explanation:
     return extractJSON(text, fallback);
   } catch (err) {
     console.error('Personality AI error:', err.message);
+    if (err.status === 429) throw err;
     return fallback;
   }
 };
@@ -140,6 +143,7 @@ Respond with ONLY a JSON object, no markdown:
     return extractJSON(text, fallback);
   } catch (err) {
     console.error('Journal AI error:', err.message);
+    if (err.status === 429) throw err;
     return fallback;
   }
 };
@@ -169,6 +173,7 @@ Respond as Alex — warm, specific, actionable. Reference their personality trai
     return text || 'I had trouble responding. Please try again.';
   } catch (err) {
     console.error('Chat AI error:', err.message);
+    if (err.status === 429) throw err;
     return 'I\'m having a moment — please send your message again!';
   }
 };

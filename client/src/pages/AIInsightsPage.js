@@ -98,7 +98,7 @@ function AIThinkingLoader() {
       <p className="text-zinc-400 text-sm font-medium transition-all duration-500">
         {steps[step]}
       </p>
-      <p className="text-zinc-600 text-xs">GPT-4o is analysing your Big Five profile</p>
+      <p className="text-zinc-600 text-xs">Gemini is analysing your Big Five profile</p>
     </div>
   );
 }
@@ -149,7 +149,7 @@ export default function AIInsightsPage() {
         <p className="text-6xl mb-4">🧠</p>
         <h2 className="font-display text-2xl text-white mb-3">No quiz data found</h2>
         <p className="text-zinc-400 mb-8 text-sm leading-relaxed max-w-sm mx-auto">
-          Take the personality quiz first to unlock your GPT-powered AI deep-dive analysis.
+          Take the personality quiz first to unlock your Gemini AI deep-dive analysis.
         </p>
         <Link to="/quiz" className="btn-primary px-10 py-3.5">Take Quiz Now →</Link>
       </div>
@@ -167,7 +167,7 @@ export default function AIInsightsPage() {
           <div className="flex items-center gap-3 mb-1">
             <h1 className="font-display text-3xl text-white">AI Deep Analysis</h1>
             <span className="badge-chip text-xs text-emerald-400 border-emerald-500/30">
-              ✦ GPT-4o Powered
+              ✦ Gemini Powered
             </span>
           </div>
           <p className="text-zinc-400 text-sm">
@@ -234,7 +234,7 @@ export default function AIInsightsPage() {
               <span className="text-2xl">✦</span>
             </div>
             <h2 className="font-display text-2xl text-white mb-3">
-              Run GPT-4o Deep Analysis
+              Run Gemini Deep Analysis
             </h2>
             <p className="text-zinc-400 text-sm max-w-md mx-auto mb-8 leading-relaxed">
               Get a personalized, AI-written summary of your personality, unique to your
@@ -272,7 +272,7 @@ export default function AIInsightsPage() {
           <div className="glass rounded-2xl p-8 relative overflow-hidden">
             <div className="absolute top-4 right-4 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs text-zinc-500 font-medium">GPT-4o</span>
+              <span className="text-xs text-zinc-500 font-medium">Gemini</span>
             </div>
             <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
               <span className="text-primary-400">✦</span> Your Personality Summary

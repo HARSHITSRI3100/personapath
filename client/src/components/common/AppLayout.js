@@ -7,7 +7,7 @@ const NAV_ITEMS = [
   { to: '/dashboard',   icon: '⬡',  label: 'Dashboard' },
   { to: '/quiz',        icon: '◈',  label: 'Take Quiz' },
   { to: '/analysis',   icon: '◉',  label: 'Insights' },
-  { to: '/ai-insights', icon: '✦',  label: 'AI Analysis', badge: 'GPT-4o' },
+  { to: '/ai-insights', icon: '✦',  label: 'AI Analysis', badge: 'Gemini' },
   { to: '/chat',        icon: '💬', label: 'Career Coach', badge: 'New' },
   { to: '/journal',     icon: '◫',  label: 'Journal' },
   { to: '/history',     icon: '◷',  label: 'History' },

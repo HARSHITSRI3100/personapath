@@ -165,7 +165,7 @@ export default function CareerChatPage() {
               </span>
             </h1>
             <p className="text-zinc-500 text-xs">
-              Powered by GPT-4o · Context-aware with your personality data
+              Powered by Gemini · Context-aware with your personality data
             </p>
           </div>
         </div>
