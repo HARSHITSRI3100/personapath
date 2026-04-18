@@ -12,7 +12,7 @@ function AIInsightsPanel({ analysis, loading, onAnalyze, content }) {
       <div className="bg-zinc-900/70 border border-zinc-700/50 rounded-xl p-5 space-y-3">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
-          <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Gemini reading entry…</p>
+          <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Groq AI reading entry…</p>
         </div>
         {[...Array(3)].map((_, i) => (
           <div key={i} className="h-3 bg-zinc-800 rounded shimmer" style={{ width: `${65 + i * 12}%` }} />
@@ -24,7 +24,7 @@ function AIInsightsPanel({ analysis, loading, onAnalyze, content }) {
   if (!analysis) {
     return (
       <div className="bg-zinc-900/50 border border-dashed border-zinc-700 rounded-xl p-4 text-center">
-        <p className="text-zinc-600 text-xs mb-3">Gemini can analyse mood, sentiment & insights</p>
+        <p className="text-zinc-600 text-xs mb-3">Groq AI can analyse mood, sentiment & insights</p>
         <button
           onClick={onAnalyze}
           disabled={!content || content.length < 20}
@@ -44,7 +44,7 @@ function AIInsightsPanel({ analysis, loading, onAnalyze, content }) {
     <div className="bg-zinc-900/70 border border-zinc-700/50 rounded-xl p-5 space-y-4">
       <div className="flex items-center gap-2">
         <div className="w-2 h-2 rounded-full bg-emerald-400" />
-        <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest flex-1">Gemini Analysis</p>
+        <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest flex-1">Groq AI Analysis</p>
         <button onClick={onAnalyze} className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">↺ refresh</button>
       </div>
 
@@ -199,7 +199,7 @@ export default function JournalPage() {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
         <h1 className="font-display text-3xl text-white">Journal</h1>
-        <p className="text-zinc-400 text-sm mt-1">Write freely — Gemini analyses mood, sentiment & personality signals</p>
+        <p className="text-zinc-400 text-sm mt-1">Write freely — Groq AI analyses mood, sentiment & personality signals</p>
       </div>
 
       <div className="grid lg:grid-cols-5 gap-6">
