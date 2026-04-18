@@ -251,7 +251,7 @@ export default function AIInsightsPage() {
               ✦ Generate My AI Analysis
             </button>
             <p className="text-zinc-600 text-xs mt-4">
-              Powered by OpenAI · Takes ~5 seconds
+              Powered by Gemini · Takes ~5 seconds
             </p>
           </div>
         </div>
