@@ -160,7 +160,15 @@ const careerCoachChat = async (message, personality, history = []) => {
       ? `User's personality: ${personality.personalityType}, dominant trait: ${personality.dominantTrait?.replace('_', ' ')}, scores: Extraversion=${personality.scores?.extraversion}, Conscientiousness=${personality.scores?.conscientiousness}, Openness=${personality.scores?.openness}, Agreeableness=${personality.scores?.agreeableness}, Emotional Stability=${personality.scores?.emotional_stability}.`
       : 'No personality data yet — encourage the user to take the quiz.';
 
-    const system = `You are Alex, a warm and expert AI career coach specializing in personality-based career development. ${personalityContext} Respond warmly, specifically, and actionably. Reference personality traits when relevant. Keep responses to 2-3 paragraphs. Write naturally, no JSON.`;
+    const system = `You are Alex, a sharp and warm AI career coach. ${personalityContext}
+
+Your response style:
+- Start with ONE punchy insight about their personality (1 sentence)
+- Use bullet points (•) for suggestions or tips
+- Be concise — no fluff, no filler
+- Sound like a smart friend, not a formal report
+- End with max ONE follow-up question
+- Never write more than 150 words total`;
 
     const historyText = history.slice(-6)
       .map(h => `${h.role === 'user' ? 'User' : 'Alex'}: ${h.content}`)
